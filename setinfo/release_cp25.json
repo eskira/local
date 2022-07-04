@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "status": "OK",
+    "timestamp": "2022-06-29T18:03:13.539+0000",
+    "pageInfo": {
+      "startIndex": 0,
+      "resultCount": 4,
+      "totalResults": 4
+    }
+  },
+  "links": {
+    "data.project": {
+      "type": "projects",
+      "href": "https://jama.geniie.net/rest/v1/projects/{data.project}"
+    }
+  },
+  "data": [
+    {
+      "id": 147,
+      "name": "先頭-SD#4",
+      "description": "SD#4",
+      "project": 96,
+      "releaseDate": "2023-09-17T15:00:00.000+0000",
+      "active": true,
+      "archived": false,
+      "itemCount": 0,
+      "type": "releases"
+    },
+    {
+      "id": 146,
+      "name": "先頭-SD#3",
+      "description": "SD#3",
+      "project": 96,
+      "releaseDate": "2023-07-16T15:00:00.000+0000",
+      "active": true,
+      "archived": false,
+      "itemCount": 100,
+      "type": "releases"
+    },
+    {
+      "id": 145,
+      "name": "先頭-SD#2",
+      "description": "SD#2ソフトリリース",
+      "project": 96,
+      "releaseDate": "2023-04-16T15:00:00.000+0000",
+      "active": true,
+      "archived": false,
+      "itemCount": 59,
+      "type": "releases"
+    },
+    {
+      "id": 144,
+      "name": "先頭-SD#1",
+      "description": "SD#1ソフトリリース",
+      "project": 96,
+      "releaseDate": "2022-12-18T15:00:00.000+0000",
+      "active": true,
+      "archived": false,
+      "itemCount": 285,
+      "type": "releases"
+    }
+  ]
+}
