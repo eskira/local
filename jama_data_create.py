@@ -240,7 +240,7 @@ if __name__ == '__main__':
     #    PickListに値の定義追加したリスト作成
     # ---------------------------------------------
     # [Input] itemtypelist_json: 使用するItemtypeの定義リスト (itemtypelist.json)
-    # [Input] ipicklist_json:  PickList定義のリスト(picklist.json)
+    # [Input] picklist_json:  PickList定義のリスト(picklist.json)
     # [Output] picklist_spec_json: リストの値（選択肢）の定義を追加したPickList定義リスト (picklist_spec.json)
     
     # 使用するitemtypeで使われるPickList IDをリストアップ
@@ -285,7 +285,7 @@ if __name__ == '__main__':
                 
                 print("picklist_id:" + str(picklist_id[i]) + "    picklist_json: " + str(picklist_json["data"][j]["id"]))
                 
-                ret_json = jama_rest.get_piclist_id(picklist_id[i])     # picklist_id[i]のデータ定義を取得
+                ret_json = jama_rest.get_piclist_id(picklist_id[i])     # Jamaからpicklist_id[i]のデータ定義を取得
                 
                 data_picklist_json["picklist_id"] = picklist_json["data"][j]["id"]
                 data_picklist_json["picklist_name"] = picklist_json["data"][j]["name"] 
@@ -299,7 +299,55 @@ if __name__ == '__main__':
         json.dump(picklist_spec_json, f, ensure_ascii=False, indent=4)       # リストの値（選択肢）の定義を追加したPickList出力
         
            
-
+    # -------------------------------------------------------
+    #   field Label(表示名)-name(フィールド名)変換用データ作成
+    # -------------------------------------------------------
+    # [Input] itemtypelist_json: 使用するItemtypeの定義リスト (itemtypelist.json)
+    # [Input] picklist_spec_json: リストの値（選択肢）の定義を追加したPickList定義リスト (picklist_spec.json)
+    # [Output] field_info_json: フィールド要素の表示名⇔フィールド名・ID判定用データ
+    
+    field_info_json = []
+    
+    for i in range(len(itemtypelist_json)):
+         
+        itemid = itemtypelist_json[i]["id"]
+        itemname = itemtypelist_json[i]["display"]
+            
+        for a in range(len(itemtypelist_json[i]["fields"])):         
+            
+            # Field内データの判定
+            field_data = {}
+            
+            key = "field_id_" + str(itemname)
+            
+            # 同じFiled要素（フィールド名）の定義の有無チェック（他ItemTypeの定義有無）
+            # 　※同じField要素の定義がある場合、ItemTypeごとのIDのみ追加する
+            flag_fieldname_exist = False
+            data = str(itemtypelist_json[i]["fields"][a]["name"])
+            if ("$" in data) == True:
+                name_id = str(itemtypelist_json[i]["fields"][a]["name"]) 
+                target = '$'
+                idx = name_id.find(target)
+                name = name_id[:idx]            # フィールド名抽出（ItemTypeのIDを除く）
+                print(str(data) + "  $より前を取出し: " + str(name))
+            else:
+                name = itemtypelist_json[i]["fields"][a]["name"]
+                                    
+            if len(field_info_json) > 0:
+                for x in range(len(field_info_json)):                  
+                    if itemtypelist_json[i]["fields"][a]["label"] == field_info_json[x]["field_label"]: # 同じField名の定義あり
+                        flag_fieldname_exist = True  
+                        field_info_json[x][str(key)] = itemtypelist_json[i]["fields"][a]["id"]          # フィールドのIDを設定
+            
+            field_data["field_name"] = name                         # フィールド名を設定
+            if flag_fieldname_exist == False:
+                field_data["field_label"] = itemtypelist_json[i]["fields"][a]["label"]   # フィールドの表示名
+                field_data[str(key)] = itemtypelist_json[i]["fields"][a]["id"]         # フィールドのIDを設定
+                field_info_json.append(field_data)          # Fieldデータ追加
+                
+    with open("./setinfo/fields_info.json", 'w', encoding='UTF-8') as f:
+        json.dump(field_info_json, f, ensure_ascii=False, indent=4)       # リストの値（  
+    
 
 
     # ---------------------------------------------
